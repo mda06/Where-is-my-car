@@ -33,11 +33,13 @@ public class LastPositionFragment extends Fragment {
         mBtnSharePos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO put the right text of car position
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, "Testing for the moment");
-                getActivity().startActivity(intent);
+                if(mListener != null) {
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    String txt = getString(R.string.txt_sms) + "\n" + mListener.getLastKnowCar().getAddress();
+                    intent.putExtra(Intent.EXTRA_TEXT, txt);
+                    getActivity().startActivity(intent);
+                }
             }
         });
         mBtnNavigate = (Button)v.findViewById(R.id.btn_navigate);
