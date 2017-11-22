@@ -1,12 +1,12 @@
-package com.mda.school.whereismycar;
+package com.mda.school.activities;
 
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.mda.school.whereismycar.model.Car;
-import com.mda.school.whereismycar.persistence.DBHelper;
+import com.mda.school.model.Car;
+import com.mda.school.persistence.DBHelper;
 
 import java.util.Date;
 

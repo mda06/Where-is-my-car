@@ -1,4 +1,4 @@
-package com.mda.school.whereismycar.model;
+package com.mda.school.model;
 
 import android.location.Location;
 
