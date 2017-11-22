@@ -9,10 +9,69 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.mda.school.whereismycar.DashboardActivity">
+    tools:context="com.mda.school.activities.DashboardActivity">
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/tv_current_pos"
+        android:id="@+id/txt_current_pos"
+        android:textStyle="normal|bold"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_below="@id/txt_current_pos"
+        android:text="Rue vandernoot 10\n1080 Bruxelles"
+        android:textSize="20sp"
+        android:id="@+id/tv_current_pos"/>
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"/>
+        android:layout_below="@id/tv_current_pos"
+        android:layout_alignRight="@id/tv_current_pos"
+        android:text="@string/btn_save_pos"
+        android:id="@+id/btn_save_pos"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/btn_save_pos"
+        android:textStyle="normal|bold"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        android:text="@string/tv_last_pos"
+        android:id="@+id/txt_last_pos"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_below="@id/txt_last_pos"
+        android:text="Rue Ourth 33\n1080 Bruxelles"
+        android:textSize="20sp"
+        android:id="@+id/tv_last_pos"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_below="@id/tv_last_pos"
+        android:layout_alignRight="@id/tv_last_pos"
+        android:text="@string/btn_share_pos"
+        android:id="@+id/btn_share_pos"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_below="@id/tv_last_pos"
+        android:text="@string/btn_navigate"
+        android:id="@+id/btn_navigate"/>
+
+
+
 </RelativeLayout>

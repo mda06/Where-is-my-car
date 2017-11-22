@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">Where is my car</string>
+    <string name="app_name">Where is my car ?</string>
+    <string name="tv_current_pos">Current position</string>
+    <string name="tv_last_pos">Last know position</string>
+    <string name="tv_empty_pos">No position</string>
+    <string name="btn_save_pos">Save current position</string>
+    <string name="btn_share_pos">Share position</string>
+    <string name="btn_navigate">Navigate</string>
 </resources>
