@@ -8,13 +8,12 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mda.school.async.AsyncResponse;
+import com.mda.school.async.GeocodingAsyncTask;
 import com.mda.school.fragments.CurrentPositionFragment;
 import com.mda.school.fragments.LastPositionFragment;
 import com.mda.school.model.Car;
@@ -51,15 +50,20 @@ public class DashboardActivity extends FragmentActivity implements CurrentPositi
         if(car == null)
             lastPos.getTvLastPosition().setText(getString(R.string.tv_empty_pos));
         else
-            lastPos.getTvLastPosition().setText(car.getLocation().toString());
+            lastPos.getTvLastPosition().setText(car.getAddress());
     }
 
     private void handleNewLocation(Location location) {
-        Log.d(TAG, "New location found -> " + location.toString());
+        Log.d(TAG, "New location found: " + location.toString());
         currentLocation = location;
 
-        CurrentPositionFragment curPos = (CurrentPositionFragment)getFragmentManager().findFragmentById(R.id.frag_current_pos);
-        curPos.getTvCurrentPosition().setText(location.toString());
+        new GeocodingAsyncTask(new AsyncResponse<String>() {
+            @Override
+            public void processFinish(String output) {
+                CurrentPositionFragment curPos = (CurrentPositionFragment)getFragmentManager().findFragmentById(R.id.frag_current_pos);
+                curPos.getTvCurrentPosition().setText(output);
+            }
+        }).execute(currentLocation);
     }
 
     public void onSaveButtonClicked() {
@@ -67,11 +71,18 @@ public class DashboardActivity extends FragmentActivity implements CurrentPositi
             Toast.makeText(this, getString(R.string.toast_current_location_null), Toast.LENGTH_SHORT).show();
             return;
         }
-        Car c = new Car();
-        c.setLocation(currentLocation);
-        c.setDate(new Date(System.currentTimeMillis()));
-        db.addCar(c);
-        findLastKnowPosition();
+        new GeocodingAsyncTask(new AsyncResponse<String>() {
+            @Override
+            public void processFinish(String output) {
+                Car c = new Car();
+                c.setLocation(currentLocation);
+                c.setDate(new Date(System.currentTimeMillis()));
+                c.setAddress(output);
+
+                db.addCar(c);
+                findLastKnowPosition();
+            }
+        }).execute(currentLocation);
     }
 
     public Car getLastKnowCar() {
@@ -117,41 +128,6 @@ public class DashboardActivity extends FragmentActivity implements CurrentPositi
                 return;
             }
             default: break;
-        }
-    }
-
-    private void dummy() {
-        //db.removeCars();
-        //addDummyCars();
-        printAllCars();
-        printFirstCar();
-    }
-
-    private void printFirstCar() {
-        Car car = db.getFirstCar();
-        if(car == null)
-            Log.d(TAG, "There is no car");
-        else
-            Log.d(TAG, "Is the first car: " + car.toString());
-    }
-
-    private void addDummyCars() {
-        addDummyCar(50.85045, 4.24878, 70000000);
-        addDummyCar(50.84045, 4.35788, 500005000);
-        addDummyCar(50.81045, 4.04878, 330000000);
-        addDummyCar(50.87045, 4.55878, 80050000);
-    }
-
-    private void addDummyCar(double lat, double lon, long timeOffset) {
-        Car car = new Car(new Location(""), new Date(System.currentTimeMillis() - timeOffset));
-        car.getLocation().setLatitude(lat);
-        car.getLocation().setLongitude(lon);
-        db.addCar(car);
-    }
-
-    private void printAllCars() {
-        for(Car c : db.getAllCars()) {
-            Log.d(TAG, c.toString());
         }
     }
 }

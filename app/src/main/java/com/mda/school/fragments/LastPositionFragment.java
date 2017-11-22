@@ -17,8 +17,6 @@ import com.mda.school.model.Car;
 
 public class LastPositionFragment extends Fragment {
 
-    private static final int PERMISSIONS_REQUEST_SEND_SMS = 1070;
-    private final String TAG = getClass().getSimpleName();
     private OnFragmentInteractionListener mListener;
     private TextView mTvLastPosition;
     private Button mBtnSharePos;

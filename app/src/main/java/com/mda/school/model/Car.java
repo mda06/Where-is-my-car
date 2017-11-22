@@ -11,6 +11,7 @@ import java.util.Date;
 public class Car {
     private int id;
     private Location location;
+    private String address;
     private Date date;
 
     public Car() {
@@ -21,6 +22,14 @@ public class Car {
     public Car(Location loc, Date date) {
         this.location = loc;
         this.date = date;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public int getId() {
