@@ -2,6 +2,7 @@ package com.mda.school.activities;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -9,7 +10,13 @@ import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.mda.school.async.AsyncResponse;
@@ -21,7 +28,7 @@ import com.mda.school.persistence.DBHelper;
 
 import java.util.Date;
 
-public class DashboardActivity extends FragmentActivity implements CurrentPositionFragment.OnFragmentInteractionListener,
+public class DashboardActivity extends AppCompatActivity implements CurrentPositionFragment.OnFragmentInteractionListener,
                                                                     LastPositionFragment.OnFragmentInteractionListener{
 
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1080;
@@ -39,9 +46,19 @@ public class DashboardActivity extends FragmentActivity implements CurrentPositi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         db = new DBHelper(this);
         currentLocation = null;
         findLastKnowPosition();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
     }
 
     private void findLastKnowPosition() {
@@ -89,6 +106,22 @@ public class DashboardActivity extends FragmentActivity implements CurrentPositi
                 findLastKnowPosition();
             }
         }).execute(currentLocation);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Log.d(TAG, "Settings");
+                return true;
+            case R.id.action_history:
+                //TODO setup an intent with database
+                startActivity(new Intent(DashboardActivity.this, HistoryActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     public Car getLastKnowCar() {
