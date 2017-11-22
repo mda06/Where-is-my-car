@@ -8,14 +8,11 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -32,6 +29,7 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
                                                                     LastPositionFragment.OnFragmentInteractionListener{
 
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1080;
+    public static final String CAR_DATABASE = "CAR_DATABASE_DASHBOARD";
     private final String TAG = getClass().getSimpleName();
     private Location currentLocation;
     private DBHelper db;
@@ -117,7 +115,9 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
                 return true;
             case R.id.action_history:
                 //TODO setup an intent with database
-                startActivity(new Intent(DashboardActivity.this, HistoryActivity.class));
+                Intent intent = new Intent(DashboardActivity.this, HistoryActivity.class);
+                //Put some intents here...
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

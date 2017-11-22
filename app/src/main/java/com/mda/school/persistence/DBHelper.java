@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.mda.school.model.Car;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -93,4 +94,5 @@ public class DBHelper extends SQLiteOpenHelper {
         car.setDate(new Date(res.getLong(res.getColumnIndex(CARS_COLUMN_DATE))));
         return car;
     }
+
 }
