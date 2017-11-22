@@ -7,4 +7,7 @@
     <string name="btn_share_pos">Share position</string>
     <string name="btn_navigate">Navigate</string>
     <string name="toast_current_location_null">Can\'t find your location</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

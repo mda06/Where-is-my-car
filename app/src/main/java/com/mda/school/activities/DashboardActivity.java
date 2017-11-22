@@ -7,6 +7,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,19 +15,20 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mda.school.fragments.CurrentPositionFragment;
 import com.mda.school.model.Car;
 import com.mda.school.persistence.DBHelper;
 
 import java.util.Date;
 
-public class DashboardActivity extends AppCompatActivity {
+public class DashboardActivity extends FragmentActivity implements CurrentPositionFragment.OnFragmentInteractionListener {
 
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1080;
     private final String TAG = getClass().getSimpleName();
     private Location currentLocation;
     private DBHelper db;
 
-    private TextView mTvCurrentPosition, mTvLastKnowPosition;
+    private TextView mTvLastKnowPosition;
 
     @Override
     protected void onResume() {
@@ -40,8 +42,6 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
         db = new DBHelper(this);
         currentLocation = null;
-        mTvCurrentPosition = (TextView)findViewById(R.id.tv_current_pos);
-        mTvCurrentPosition.setText(getString(R.string.tv_empty_pos));
         mTvLastKnowPosition = (TextView)findViewById(R.id.tv_last_pos);
         findLastKnowPosition();
     }
@@ -57,7 +57,9 @@ public class DashboardActivity extends AppCompatActivity {
     private void handleNewLocation(Location location) {
         Log.d(TAG, "New location found -> " + location.toString());
         currentLocation = location;
-        mTvCurrentPosition.setText(location.toString());
+
+        CurrentPositionFragment curPos = (CurrentPositionFragment)getFragmentManager().findFragmentById(R.id.frag_current_pos);
+        curPos.getTvCurrentPosition().setText(location.toString());
     }
 
     public void onNavigateClicked(View view) {
@@ -70,7 +72,7 @@ public class DashboardActivity extends AppCompatActivity {
         Toast.makeText(this, "Share position for " + c.getDate().toString(), Toast.LENGTH_SHORT).show();
     }
 
-    public void onSavePosClicked(View view) {
+    public void onSaveButtonClicked() {
         if(currentLocation == null) {
             Toast.makeText(this, getString(R.string.toast_current_location_null), Toast.LENGTH_SHORT).show();
             return;

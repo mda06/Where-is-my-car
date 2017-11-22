@@ -11,39 +11,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.mda.school.activities.DashboardActivity">
 
-    <TextView
+    <fragment
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="@string/tv_current_pos"
-        android:id="@+id/txt_current_pos"
-        android:textStyle="normal|bold"
-        android:textSize="30sp"
-        android:textAlignment="center"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:layout_below="@id/txt_current_pos"
-        android:text="Rue vandernoot 10\n1080 Bruxelles"
-        android:textSize="20sp"
-        android:id="@+id/tv_current_pos"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tv_current_pos"
-        android:layout_alignRight="@id/tv_current_pos"
-        android:text="@string/btn_save_pos"
-        android:id="@+id/btn_save_pos"
-        android:onClick="onSavePosClicked"/>
-
+        android:id="@+id/frag_current_pos"
+        android:name="com.mda.school.fragments.CurrentPositionFragment"
+        tools:layout="@layout/fragment_current_position"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:layout_below="@id/btn_save_pos"
+        android:layout_below="@id/frag_current_pos"
         android:textStyle="normal|bold"
         android:textSize="30sp"
         android:textAlignment="center"
