@@ -17,13 +17,14 @@ import java.util.Date;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 7;
     public static final String DATABASE_NAME = "Cars.db";
     public static final String CARS_TABLE_NAME = "cars";
     public static final String CARS_COLUMN_ID = "id";
     public static final String CARS_COLUMN_LATITUDE = "latitude";
     public static final String CARS_COLUMN_LONGITUDE = "longitude";
     public static final String CARS_COLUMN_DATE = "date";
+    public static final String CARS_COLUMN_ADDRESS = "address";
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -35,6 +36,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "(" + CARS_COLUMN_ID + " INTEGER PRIMARY KEY, "
                 + CARS_COLUMN_LATITUDE + " REAL, "
                 + CARS_COLUMN_LONGITUDE + " REAL, "
+                + CARS_COLUMN_ADDRESS + " TEXT, "
                 + CARS_COLUMN_DATE + " INTEGER);");
     }
 
@@ -50,6 +52,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(CARS_COLUMN_LATITUDE, car.getLocation().getLatitude());
         contentValues.put(CARS_COLUMN_LONGITUDE, car.getLocation().getLongitude());
         contentValues.put(CARS_COLUMN_DATE, car.getDate().getTime());
+        contentValues.put(CARS_COLUMN_ADDRESS, car.getAddress());
         db.insert(CARS_TABLE_NAME, null, contentValues);
         return true;
     }
@@ -86,6 +89,7 @@ public class DBHelper extends SQLiteOpenHelper {
         car.setId(res.getInt(res.getColumnIndex(CARS_COLUMN_ID)));
         car.getLocation().setLatitude(res.getDouble(res.getColumnIndex(CARS_COLUMN_LATITUDE)));
         car.getLocation().setLongitude(res.getDouble(res.getColumnIndex(CARS_COLUMN_LONGITUDE)));
+        car.setAddress(res.getString(res.getColumnIndex(CARS_COLUMN_ADDRESS)));
         car.setDate(new Date(res.getLong(res.getColumnIndex(CARS_COLUMN_DATE))));
         return car;
     }

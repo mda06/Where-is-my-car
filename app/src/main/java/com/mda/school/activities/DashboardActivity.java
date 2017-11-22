@@ -47,7 +47,7 @@ public class DashboardActivity extends FragmentActivity implements CurrentPositi
     private void findLastKnowPosition() {
         Car car = db.getFirstCar();
         LastPositionFragment lastPos = (LastPositionFragment)getFragmentManager().findFragmentById(R.id.frag_last_pos);
-        if(car == null)
+        if(car == null || car.getAddress() == null)
             lastPos.getTvLastPosition().setText(getString(R.string.tv_empty_pos));
         else
             lastPos.getTvLastPosition().setText(car.getAddress());
@@ -61,7 +61,10 @@ public class DashboardActivity extends FragmentActivity implements CurrentPositi
             @Override
             public void processFinish(String output) {
                 CurrentPositionFragment curPos = (CurrentPositionFragment)getFragmentManager().findFragmentById(R.id.frag_current_pos);
-                curPos.getTvCurrentPosition().setText(output);
+                if(output == null)
+                    curPos.getTvCurrentPosition().setText(getString(R.string.tv_empty_pos));
+                else
+                    curPos.getTvCurrentPosition().setText(output);
             }
         }).execute(currentLocation);
     }

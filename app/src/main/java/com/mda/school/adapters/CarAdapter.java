@@ -34,6 +34,7 @@ public class CarAdapter extends ArrayAdapter<Car> {
         TextView tvDate = (TextView) convertView.findViewById(R.id.tv_item_date);
 
         Car c = getItem(position);
+        //If address is null show error string and not an empty string
         tvLocation.setText(c.getAddress());
         tvDate.setText(Util.dateFormat(c.getDate()));
 
