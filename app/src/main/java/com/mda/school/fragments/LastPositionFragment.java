@@ -1,6 +1,8 @@
 package com.mda.school.fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -32,10 +34,6 @@ public class LastPositionFragment extends Fragment {
         mBtnSharePos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mListener != null) {
-                    //Remove useless warnings
-                    mListener.getLastKnowCar();
-                }
                 Log.d(TAG, "Btn share clicked");
             }
         });
@@ -43,7 +41,15 @@ public class LastPositionFragment extends Fragment {
         mBtnNavigate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Btn navigate clicked");
+                if(mListener != null) {
+                    Car c = mListener.getLastKnowCar();
+                    double lat = c.getLocation().getLatitude();
+                    double lng = c.getLocation().getLongitude();
+                    String mTitle = "My car";
+                    String geoUri = "http://maps.google.com/maps?q=loc:" + lat + "," + lng + " (" + mTitle + ")";
+                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW,  Uri.parse(geoUri));
+                    startActivity(intent);
+                }
             }
         });
         return v;
