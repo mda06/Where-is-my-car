@@ -11,4 +11,6 @@
     <string name="lbl_history">History</string>
     <string name="lbl_dashboard">Dashboard</string>
     <string name="btn_clear_database">Clear database</string>
+    <string name="txt_database_restored">Database is restored</string>
+    <string name="txt_database_deleted">Database is deleted</string>
 </resources>
