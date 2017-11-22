@@ -78,6 +78,7 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
             @Override
             public void processFinish(String output) {
                 CurrentPositionFragment curPos = (CurrentPositionFragment)getFragmentManager().findFragmentById(R.id.frag_current_pos);
+                if(curPos == null) return;
                 if(output != null)
                     curPos.getTvCurrentPosition().setText(output);
                 else if(location != null)

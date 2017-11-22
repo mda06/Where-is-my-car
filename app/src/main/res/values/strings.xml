@@ -10,4 +10,5 @@
     <string name="txt_sms">Hey, i parked my car at </string>
     <string name="lbl_history">History</string>
     <string name="lbl_dashboard">Dashboard</string>
+    <string name="btn_clear_database">Clear database</string>
 </resources>
