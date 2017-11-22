@@ -16,19 +16,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mda.school.fragments.CurrentPositionFragment;
+import com.mda.school.fragments.LastPositionFragment;
 import com.mda.school.model.Car;
 import com.mda.school.persistence.DBHelper;
 
 import java.util.Date;
 
-public class DashboardActivity extends FragmentActivity implements CurrentPositionFragment.OnFragmentInteractionListener {
+public class DashboardActivity extends FragmentActivity implements CurrentPositionFragment.OnFragmentInteractionListener,
+                                                                    LastPositionFragment.OnFragmentInteractionListener{
 
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1080;
     private final String TAG = getClass().getSimpleName();
     private Location currentLocation;
     private DBHelper db;
-
-    private TextView mTvLastKnowPosition;
 
     @Override
     protected void onResume() {
@@ -42,16 +42,16 @@ public class DashboardActivity extends FragmentActivity implements CurrentPositi
         setContentView(R.layout.activity_dashboard);
         db = new DBHelper(this);
         currentLocation = null;
-        mTvLastKnowPosition = (TextView)findViewById(R.id.tv_last_pos);
         findLastKnowPosition();
     }
 
     private void findLastKnowPosition() {
         Car car = db.getFirstCar();
+        LastPositionFragment lastPos = (LastPositionFragment)getFragmentManager().findFragmentById(R.id.frag_last_pos);
         if(car == null)
-            mTvLastKnowPosition.setText(getString(R.string.tv_empty_pos));
+            lastPos.getTvLastPosition().setText(getString(R.string.tv_empty_pos));
         else
-            mTvLastKnowPosition.setText(car.getLocation().toString());
+            lastPos.getTvLastPosition().setText(car.getLocation().toString());
     }
 
     private void handleNewLocation(Location location) {
@@ -60,16 +60,6 @@ public class DashboardActivity extends FragmentActivity implements CurrentPositi
 
         CurrentPositionFragment curPos = (CurrentPositionFragment)getFragmentManager().findFragmentById(R.id.frag_current_pos);
         curPos.getTvCurrentPosition().setText(location.toString());
-    }
-
-    public void onNavigateClicked(View view) {
-        Car c = db.getFirstCar();
-        Toast.makeText(this, "Navigate for " + c.getDate().toString(), Toast.LENGTH_SHORT).show();
-    }
-
-    public void onSharePosClicked(View view) {
-        Car c = db.getFirstCar();
-        Toast.makeText(this, "Share position for " + c.getDate().toString(), Toast.LENGTH_SHORT).show();
     }
 
     public void onSaveButtonClicked() {
@@ -82,6 +72,10 @@ public class DashboardActivity extends FragmentActivity implements CurrentPositi
         c.setDate(new Date(System.currentTimeMillis()));
         db.addCar(c);
         findLastKnowPosition();
+    }
+
+    public Car getLastKnowCar() {
+        return db.getFirstCar();
     }
 
     private void requestLocation() {

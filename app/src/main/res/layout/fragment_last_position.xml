@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.mda.school.fragments.LastPositionFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="normal|bold"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        android:text="@string/tv_last_pos"
+        android:id="@+id/txt_last_pos"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_below="@id/txt_last_pos"
+        android:text="Rue Ourth 33\n1080 Bruxelles"
+        android:textSize="20sp"
+        android:id="@+id/tv_last_pos"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_below="@id/tv_last_pos"
+        android:layout_alignRight="@id/tv_last_pos"
+        android:text="@string/btn_share_pos"
+        android:id="@+id/btn_share_pos"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_below="@id/tv_last_pos"
+        android:text="@string/btn_navigate"
+        android:id="@+id/btn_navigate"/>
+
+</RelativeLayout>
