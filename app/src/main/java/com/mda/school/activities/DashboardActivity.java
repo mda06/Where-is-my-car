@@ -1,9 +1,18 @@
 package com.mda.school.activities;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mda.school.model.Car;
 import com.mda.school.persistence.DBHelper;
@@ -12,14 +21,110 @@ import java.util.Date;
 
 public class DashboardActivity extends AppCompatActivity {
 
+    private static final int PERMISSION_REQUEST_FINE_LOCATION = 1080;
     private final String TAG = getClass().getSimpleName();
+    private Location currentLocation;
     private DBHelper db;
+
+    private TextView mTvCurrentPosition, mTvLastKnowPosition;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        requestLocation();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         db = new DBHelper(this);
+        currentLocation = null;
+        mTvCurrentPosition = (TextView)findViewById(R.id.tv_current_pos);
+        mTvCurrentPosition.setText(getString(R.string.tv_empty_pos));
+        mTvLastKnowPosition = (TextView)findViewById(R.id.tv_last_pos);
+        findLastKnowPosition();
+    }
+
+    private void findLastKnowPosition() {
+        Car car = db.getFirstCar();
+        if(car == null)
+            mTvLastKnowPosition.setText(getString(R.string.tv_empty_pos));
+        else
+            mTvLastKnowPosition.setText(car.getLocation().toString());
+    }
+
+    private void handleNewLocation(Location location) {
+        Log.d(TAG, "New location found -> " + location.toString());
+        currentLocation = location;
+        mTvCurrentPosition.setText(location.toString());
+    }
+
+    public void onNavigateClicked(View view) {
+        Car c = db.getFirstCar();
+        Toast.makeText(this, "Navigate for " + c.getDate().toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    public void onSharePosClicked(View view) {
+        Car c = db.getFirstCar();
+        Toast.makeText(this, "Share position for " + c.getDate().toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    public void onSavePosClicked(View view) {
+        if(currentLocation == null) {
+            Toast.makeText(this, getString(R.string.toast_current_location_null), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Car c = new Car();
+        c.setLocation(currentLocation);
+        c.setDate(new Date(System.currentTimeMillis()));
+        db.addCar(c);
+        findLastKnowPosition();
+    }
+
+    private void requestLocation() {
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        //Handle last know location before update the new location
+        handleNewLocation(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
+        LocationListener locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                handleNewLocation(location);
+            }
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+            public void onProviderEnabled(String provider) {}
+            public void onProviderDisabled(String provider) {}
+        };
+
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                //TODO Explain user -> asynchrony
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        PERMISSION_REQUEST_FINE_LOCATION);
+            }
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_FINE_LOCATION: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "Access granted for fine_location");
+                    requestLocation();
+                } else {
+                    Log.d(TAG, "Access not granted for fine_location");
+                }
+                return;
+            }
+            default: break;
+        }
+    }
+
+    private void dummy() {
         //db.removeCars();
         //addDummyCars();
         printAllCars();

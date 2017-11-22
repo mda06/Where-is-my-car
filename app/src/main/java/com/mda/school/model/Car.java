@@ -15,6 +15,7 @@ public class Car {
 
     public Car() {
         location = new Location("");
+        date = new Date();
     }
 
     public Car(Location loc, Date date) {
