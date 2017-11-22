@@ -17,6 +17,7 @@ import com.mda.school.model.Car;
 
 public class LastPositionFragment extends Fragment {
 
+    private static final int PERMISSIONS_REQUEST_SEND_SMS = 1070;
     private final String TAG = getClass().getSimpleName();
     private OnFragmentInteractionListener mListener;
     private TextView mTvLastPosition;
@@ -34,7 +35,11 @@ public class LastPositionFragment extends Fragment {
         mBtnSharePos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Btn share clicked");
+                //TODO put the right text of car position
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, "Testing for the moment");
+                getActivity().startActivity(intent);
             }
         });
         mBtnNavigate = (Button)v.findViewById(R.id.btn_navigate);
