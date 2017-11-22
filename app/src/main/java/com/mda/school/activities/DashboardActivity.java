@@ -53,7 +53,7 @@ public class DashboardActivity extends FragmentActivity implements CurrentPositi
             lastPos.getTvLastPosition().setText(car.getAddress());
     }
 
-    private void handleNewLocation(Location location) {
+    private void handleNewLocation(final Location location) {
         Log.d(TAG, "New location found: " + location.toString());
         currentLocation = location;
 
@@ -61,10 +61,13 @@ public class DashboardActivity extends FragmentActivity implements CurrentPositi
             @Override
             public void processFinish(String output) {
                 CurrentPositionFragment curPos = (CurrentPositionFragment)getFragmentManager().findFragmentById(R.id.frag_current_pos);
-                if(output == null)
-                    curPos.getTvCurrentPosition().setText(getString(R.string.tv_empty_pos));
-                else
+                if(output != null)
                     curPos.getTvCurrentPosition().setText(output);
+                else if(location != null)
+                    curPos.getTvCurrentPosition().setText("Latitude: " + location.getLatitude()
+                            + "\nLongitude: " + location.getLongitude());
+                else
+                    curPos.getTvCurrentPosition().setText(getString(R.string.tv_empty_pos));
             }
         }).execute(currentLocation);
     }
