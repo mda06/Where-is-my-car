@@ -69,6 +69,7 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
     }
 
     private void handleNewLocation(final Location location) {
+        if(location == null) return;
         Log.d(TAG, "New location found: " + location.toString());
         currentLocation = location;
 
@@ -110,13 +111,9 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                Log.d(TAG, "Settings");
-                return true;
             case R.id.action_history:
-                //TODO setup an intent with database
                 Intent intent = new Intent(DashboardActivity.this, HistoryActivity.class);
-                //Put some intents here...
+                //TODO addExtra...
                 startActivity(intent);
                 return true;
             default:
