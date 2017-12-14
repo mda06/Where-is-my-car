@@ -7,7 +7,7 @@
     <string name="btn_share_pos">Partager position</string>
     <string name="btn_navigate">Naviguer</string>
     <string name="toast_current_location_null">Impossible de trouver la position</string>
-    <string name="txt_sms">Salut! J'ai garé la voiture à </string>
+    <string name="txt_sms">Salut! J\'ai garé la voiture à </string>
     <string name="lbl_history">Historique</string>
     <string name="lbl_dashboard">Dashboard</string>
     <string name="btn_clear_database">Supprimer la bdd</string>
