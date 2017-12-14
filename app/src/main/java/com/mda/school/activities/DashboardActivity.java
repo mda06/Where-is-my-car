@@ -62,13 +62,20 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
     private void findLastKnowPosition() {
         Car car = db.getFirstCar();
         LastPositionFragment lastPos = (LastPositionFragment)getFragmentManager().findFragmentById(R.id.frag_last_pos);
-        if(car == null && car.getAddress() == null && car.getLocation() == null)
+        if(car == null || car.getAddress() == null && car.getLocation() == null) {
             lastPos.getTvLastPosition().setText(getString(R.string.tv_empty_pos));
-        else if(car.getAddress() == null)
-            lastPos.getTvLastPosition().setText("Latitude: " + car.getLocation().getLatitude()
-                    + "\nLongitude: " + car.getLocation().getLongitude());
-        else
-            lastPos.getTvLastPosition().setText(car.getAddress());
+            lastPos.getmBtnNavigate().setEnabled(false);
+            lastPos.getmBtnSharePos().setEnabled(false);
+        } else {
+            if (car.getAddress() == null)
+                lastPos.getTvLastPosition().setText("Latitude: " + car.getLocation().getLatitude()
+                        + "\nLongitude: " + car.getLocation().getLongitude());
+            else
+                lastPos.getTvLastPosition().setText(car.getAddress());
+
+            lastPos.getmBtnNavigate().setEnabled(true);
+            lastPos.getmBtnSharePos().setEnabled(true);
+        }
     }
 
     private void handleNewLocation(final Location location) {
@@ -146,6 +153,7 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
                 //TODO Explain user -> asynchrony
+                Log.d(TAG, "shouldShowRequestPermissionRationale");
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         PERMISSION_REQUEST_FINE_LOCATION);

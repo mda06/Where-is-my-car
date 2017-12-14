@@ -88,6 +88,14 @@ public class LastPositionFragment extends Fragment {
         return mTvLastPosition;
     }
 
+    public Button getmBtnSharePos() {
+        return mBtnSharePos;
+    }
+
+    public Button getmBtnNavigate() {
+        return mBtnNavigate;
+    }
+
     public interface OnFragmentInteractionListener {
         Car getLastKnowCar();
     }
