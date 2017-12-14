@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Où est ma voiture ?</string>
+    <string name="tv_current_pos">Position actuelle</string>
+    <string name="tv_last_pos">Dernière position connue</string>
+    <string name="tv_empty_pos">Pas de position</string>
+    <string name="btn_save_pos">Enregistrer la position</string>
+    <string name="btn_share_pos">Partager position</string>
+    <string name="btn_navigate">Naviguer</string>
+    <string name="toast_current_location_null">Impossible de trouver la position</string>
+    <string name="txt_sms">Salut! J'ai garé la voiture à </string>
+    <string name="lbl_history">Historique</string>
+    <string name="lbl_dashboard">Dashboard</string>
+    <string name="btn_clear_database">Supprimer la bdd</string>
+    <string name="txt_database_restored">La bdd est récuperé</string>
+    <string name="txt_database_deleted">La bdd est supprimé</string>
+</resources>

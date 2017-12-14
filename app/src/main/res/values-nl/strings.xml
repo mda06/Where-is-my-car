@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Waar is mijn auto ?</string>
+    <string name="tv_current_pos">Huidige positie</string>
+    <string name="tv_last_pos">Laatste bekende positie</string>
+    <string name="tv_empty_pos">Geen positie</string>
+    <string name="btn_save_pos">Positie opslagen</string>
+    <string name="btn_share_pos">Positie delen</string>
+    <string name="btn_navigate">Navigeren</string>
+    <string name="toast_current_location_null">Kan de positie niet vinden</string>
+    <string name="txt_sms">Hey, de auto is geparkeerd aan </string>
+    <string name="lbl_history">Geschiedenis</string>
+    <string name="lbl_dashboard">Dashboard</string>
+    <string name="btn_clear_database">Database verwijderen</string>
+    <string name="txt_database_restored">Database is hersteld</string>
+    <string name="txt_database_deleted">Database is verwijderd</string>
+</resources>
