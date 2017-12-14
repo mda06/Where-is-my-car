@@ -34,8 +34,13 @@ public class CarAdapter extends ArrayAdapter<Car> {
         TextView tvDate = (TextView) convertView.findViewById(R.id.tv_item_date);
 
         Car c = getItem(position);
-        //If address is null show error string and not an empty string
-        tvLocation.setText(c.getAddress());
+        if(c.getAddress() != null)
+            tvLocation.setText(c.getAddress());
+        else {
+            double lat = c.getLocation().getLatitude();
+            double lon = c.getLocation().getLongitude();
+            tvLocation.setText(String.format("Lat:%.2f / Lon:%.2f", lat, lon));
+        }
         tvDate.setText(Util.dateFormat(c.getDate()));
 
         return convertView;

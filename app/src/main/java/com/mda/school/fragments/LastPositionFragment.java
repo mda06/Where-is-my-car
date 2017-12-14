@@ -36,7 +36,14 @@ public class LastPositionFragment extends Fragment {
                 if(mListener != null) {
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setType("text/plain");
-                    String txt = getString(R.string.txt_sms) + "\n" + mListener.getLastKnowCar().getAddress();
+                    String txt = getString(R.string.txt_sms) + "\n";
+                    if(mListener.getLastKnowCar().getAddress() != null)
+                        txt += mListener.getLastKnowCar().getAddress();
+                    else {
+                        double lat = mListener.getLastKnowCar().getLocation().getLatitude();
+                        double lon = mListener.getLastKnowCar().getLocation().getLongitude();
+                        txt+= String.format("Lat:%.2f / Lon:%.2f", lat, lon);
+                    }
                     intent.putExtra(Intent.EXTRA_TEXT, txt);
                     getActivity().startActivity(intent);
                 }

@@ -62,8 +62,11 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
     private void findLastKnowPosition() {
         Car car = db.getFirstCar();
         LastPositionFragment lastPos = (LastPositionFragment)getFragmentManager().findFragmentById(R.id.frag_last_pos);
-        if(car == null || car.getAddress() == null)
+        if(car == null && car.getAddress() == null && car.getLocation() == null)
             lastPos.getTvLastPosition().setText(getString(R.string.tv_empty_pos));
+        else if(car.getAddress() == null)
+            lastPos.getTvLastPosition().setText("Latitude: " + car.getLocation().getLatitude()
+                    + "\nLongitude: " + car.getLocation().getLongitude());
         else
             lastPos.getTvLastPosition().setText(car.getAddress());
     }
