@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.SEND_SMS"/>
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -25,9 +25,18 @@
         <activity
             android:name=".HistoryActivity"
             android:label="@string/lbl_history"
-            android:parentActivityName="com.mda.school.activities.DashboardActivity">
-
+            android:parentActivityName=".DashboardActivity">
         </activity>
+
+        <receiver android:name="com.mda.school.widget.CarPositionWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/car_position_widget_info"/>
+        </receiver>
     </application>
 
 </manifest>
