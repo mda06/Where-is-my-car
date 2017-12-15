@@ -21,6 +21,7 @@ public class GeocodingAsyncTask extends AsyncTask<Location, Void, String> {
     public AsyncResponse<String> delegate = null;
 
     public GeocodingAsyncTask(AsyncResponse<String> response) {
+
         delegate = response;
     }
 
@@ -30,7 +31,7 @@ public class GeocodingAsyncTask extends AsyncTask<Location, Void, String> {
         Location loc = params[0];
         String key = "AIzaSyCGpv6ko1ieBPYj00r0WGeBDdZcS9DkUOE";
         String path = "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
-        path += loc.getLongitude() + "," + loc.getLatitude() + "&sensor=true";
+        path += loc.getLatitude() + "," + loc.getLongitude() + "&sensor=true";
         path += "&key=" + key;
 
         try{
@@ -42,6 +43,7 @@ public class GeocodingAsyncTask extends AsyncTask<Location, Void, String> {
                 Log.d(TAG, "Address found: " + adr);
                 return adr;
             }
+            return jsonObject.toString();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {

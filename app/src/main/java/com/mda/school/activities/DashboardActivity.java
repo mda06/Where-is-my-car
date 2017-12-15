@@ -29,8 +29,6 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
         LastPositionFragment.OnFragmentInteractionListener {
 
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1080;
-    private static final int PERMISSION_REQUEST_INTERNET = 1070;
-    public static final String CAR_DATABASE = "CAR_DATABASE_DASHBOARD";
     private final String TAG = getClass().getSimpleName();
     private Location currentLocation;
     private DBHelper db;
@@ -52,7 +50,6 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
         db = new DBHelper(this);
         currentLocation = null;
         findLastKnowPosition();
-        requestLocation();
     }
 
     @Override
@@ -87,17 +84,6 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
         }
         Log.d(TAG, "New location found: " + location.toString());
         currentLocation = location;
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
-                //TODO Explain user -> asynchrony
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET},
-                        PERMISSION_REQUEST_INTERNET);
-            }
-            Log.d(TAG, "handleNewLocation");
-            return;
-        }
 
         new GeocodingAsyncTask(new AsyncResponse<String>() {
             @Override
@@ -197,15 +183,6 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
                     requestLocation();
                 } else {
                     Log.d(TAG, "Access not granted for fine_location");
-                }
-                return;
-            }
-            case PERMISSION_REQUEST_INTERNET: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.d(TAG, "Access granted for internet");
-                    handleNewLocation(currentLocation);
-                } else {
-                    Log.d(TAG, "Access not granted for internet");
                 }
                 return;
             }

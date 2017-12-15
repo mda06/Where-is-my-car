@@ -58,8 +58,8 @@ public class LastPositionFragment extends Fragment {
                     double lat = c.getLocation().getLatitude();
                     double lng = c.getLocation().getLongitude();
                     String mTitle = "My car";
-                    String geoUri = "http://maps.google.com/maps?q=loc:" + lng + "," + lat + " (" + mTitle + ")";
-                    Log.d("TEST", geoUri);
+                    String geoUri = "http://maps.google.com/maps?q=loc:" + lat + "," + lng + " (" + mTitle + ")";
+                    Log.d("LastPositionFragment", geoUri);
                     Intent intent = new Intent(android.content.Intent.ACTION_VIEW,  Uri.parse(geoUri));
                     startActivity(intent);
                 }
