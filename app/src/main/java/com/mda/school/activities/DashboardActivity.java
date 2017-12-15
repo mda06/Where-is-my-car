@@ -81,7 +81,10 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
     }
 
     private void handleNewLocation(final Location location) {
-        if (location == null) return;
+        if (location == null) {
+            Log.d(TAG, "Cannot handle new location because it's null");
+            return;
+        }
         Log.d(TAG, "New location found: " + location.toString());
         currentLocation = location;
 
@@ -165,20 +168,24 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                                     PERMISSION_REQUEST_FINE_LOCATION);
             }
+            Log.d(TAG, "requestLocation - location permission is not granted");
             return;
         }
+        Log.d(TAG, "requestLocation - location permission is granted");
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         //Handle last know location before update the new location
         handleNewLocation(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
+                Log.d(TAG, "Location - onLocationChanged");
                 handleNewLocation(location);
             }
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-            public void onProviderEnabled(String provider) {}
-            public void onProviderDisabled(String provider) {}
+            public void onStatusChanged(String provider, int status, Bundle extras) { Log.d(TAG, "Location - onStatusChanged");}
+            public void onProviderEnabled(String provider) {Log.d(TAG, "Location - onProviderEnabled");}
+            public void onProviderDisabled(String provider) {Log.d(TAG, "Location - onProviderDisabled");}
         };
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
     }
 
     @Override
