@@ -16,6 +16,7 @@ public class CurrentPositionFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private TextView mTvCurrentPosition;
     private Button mBtnSavePos;
+    private Button mBtnRefreshPos;
 
     public CurrentPositionFragment() {}
 
@@ -30,6 +31,15 @@ public class CurrentPositionFragment extends Fragment {
             public void onClick(View v) {
                 if (mListener != null) {
                     mListener.onSaveButtonClicked();
+                }
+            }
+        });
+        mBtnRefreshPos = (Button)v.findViewById(R.id.btn_refresh_pos);
+        mBtnRefreshPos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.onRefreshLocationClicked();
                 }
             }
         });
@@ -58,5 +68,6 @@ public class CurrentPositionFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onSaveButtonClicked();
+        void onRefreshLocationClicked();
     }
 }

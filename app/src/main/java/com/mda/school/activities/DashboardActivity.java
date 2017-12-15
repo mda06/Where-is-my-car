@@ -26,9 +26,10 @@ import com.mda.school.persistence.DBHelper;
 import java.util.Date;
 
 public class DashboardActivity extends AppCompatActivity implements CurrentPositionFragment.OnFragmentInteractionListener,
-                                                                    LastPositionFragment.OnFragmentInteractionListener{
+        LastPositionFragment.OnFragmentInteractionListener {
 
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1080;
+    private static final int PERMISSION_REQUEST_INTERNET = 1070;
     public static final String CAR_DATABASE = "CAR_DATABASE_DASHBOARD";
     private final String TAG = getClass().getSimpleName();
     private Location currentLocation;
@@ -51,6 +52,7 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
         db = new DBHelper(this);
         currentLocation = null;
         findLastKnowPosition();
+        requestLocation();
     }
 
     @Override
@@ -61,8 +63,8 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
 
     private void findLastKnowPosition() {
         Car car = db.getFirstCar();
-        LastPositionFragment lastPos = (LastPositionFragment)getFragmentManager().findFragmentById(R.id.frag_last_pos);
-        if(car == null || car.getAddress() == null && car.getLocation() == null) {
+        LastPositionFragment lastPos = (LastPositionFragment) getFragmentManager().findFragmentById(R.id.frag_last_pos);
+        if (car == null || car.getAddress() == null && car.getLocation() == null) {
             lastPos.getTvLastPosition().setText(getString(R.string.tv_empty_pos));
             lastPos.getmBtnNavigate().setEnabled(false);
             lastPos.getmBtnSharePos().setEnabled(false);
@@ -79,18 +81,29 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
     }
 
     private void handleNewLocation(final Location location) {
-        if(location == null) return;
+        if (location == null) return;
         Log.d(TAG, "New location found: " + location.toString());
         currentLocation = location;
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
+                //TODO Explain user -> asynchrony
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET},
+                        PERMISSION_REQUEST_INTERNET);
+            }
+            Log.d(TAG, "handleNewLocation");
+            return;
+        }
 
         new GeocodingAsyncTask(new AsyncResponse<String>() {
             @Override
             public void processFinish(String output) {
-                CurrentPositionFragment curPos = (CurrentPositionFragment)getFragmentManager().findFragmentById(R.id.frag_current_pos);
-                if(curPos == null) return;
-                if(output != null)
+                CurrentPositionFragment curPos = (CurrentPositionFragment) getFragmentManager().findFragmentById(R.id.frag_current_pos);
+                if (curPos == null) return;
+                if (output != null)
                     curPos.getTvCurrentPosition().setText(output);
-                else if(location != null)
+                else if (location != null)
                     curPos.getTvCurrentPosition().setText("Latitude: " + location.getLatitude()
                             + "\nLongitude: " + location.getLongitude());
                 else
@@ -100,10 +113,11 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
     }
 
     public void onSaveButtonClicked() {
-        if(currentLocation == null) {
+        if (currentLocation == null) {
             Toast.makeText(this, getString(R.string.toast_current_location_null), Toast.LENGTH_SHORT).show();
             return;
         }
+        Log.d(TAG, "Save location : " + currentLocation.toString());
         new GeocodingAsyncTask(new AsyncResponse<String>() {
             @Override
             public void processFinish(String output) {
@@ -136,7 +150,23 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
         return db.getFirstCar();
     }
 
+    @Override
+    public void onRefreshLocationClicked() {
+        requestLocation();
+    }
+
     private void requestLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                //TODO Explain user -> asynchrony
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                                    PERMISSION_REQUEST_FINE_LOCATION);
+            }
+            return;
+        }
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         //Handle last know location before update the new location
         handleNewLocation(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
@@ -148,18 +178,6 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
             public void onProviderEnabled(String provider) {}
             public void onProviderDisabled(String provider) {}
         };
-
-        if (ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                //TODO Explain user -> asynchrony
-                Log.d(TAG, "shouldShowRequestPermissionRationale");
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        PERMISSION_REQUEST_FINE_LOCATION);
-            }
-            return;
-        }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
     }
 
@@ -175,7 +193,18 @@ public class DashboardActivity extends AppCompatActivity implements CurrentPosit
                 }
                 return;
             }
-            default: break;
+            case PERMISSION_REQUEST_INTERNET: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "Access granted for internet");
+                    handleNewLocation(currentLocation);
+                } else {
+                    Log.d(TAG, "Access not granted for internet");
+                }
+                return;
+            }
+            default:
+                Log.d(TAG, "onRequestPermissionsResult requestcode not handled for: " + requestCode);
+                break;
         }
     }
 }
